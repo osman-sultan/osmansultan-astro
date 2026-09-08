@@ -1,0 +1,162 @@
+---
+import { Image } from "astro:assets"
+import { getCollection } from "astro:content"
+
+import Layout from "@/layouts/main.astro"
+import { badgeVariants } from "@/components/ui/badge"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+
+const projects = await getCollection("projects")
+
+const groups = [
+  { key: "recent", title: "Recent" },
+  { key: "earlier", title: "Earlier work" },
+] as const
+
+// Filter chips, in order of first appearance.
+const types = ["all", ...new Set(projects.map((p) => p.data.type))]
+
+const linkClass =
+  "text-link underline underline-offset-4 transition-opacity hover:opacity-70"
+---
+
+<Layout title="Projects">
+  <section class="flex flex-col gap-6 leading-relaxed">
+    <p>
+      Take a look around! I often use TypeScript, Next.js/React.js, Python, SQL,
+      and Java. Smaller projects live on my{" "}
+      <a
+        href="https://github.com/osman-sultan"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>GitHub</a
+      >.
+    </p>
+
+    <!-- Type filter. Plain buttons plus a small script below; the active
+         one is styled through aria-pressed. -->
+    <div
+      class="flex flex-wrap gap-2 font-mono"
+      role="group"
+      aria-label="Filter projects by type"
+      data-project-filters
+    >
+      {
+        types.map((type) => (
+          <button
+            type="button"
+            data-filter={type}
+            aria-pressed={type === "all" ? "true" : "false"}
+            class={cn(
+              buttonVariants({ variant: "outline", size: "sm" }),
+              // Tinted with the theme's link colour; the active one is solid.
+              "rounded-none border-link/40 bg-link/15 font-mono text-link hover:bg-link/25 hover:text-link aria-pressed:border-link aria-pressed:bg-link aria-pressed:text-background"
+            )}
+          >
+            {type}
+          </button>
+        ))
+      }
+    </div>
+
+    {
+      groups.map((group) => {
+        const list = projects.filter((p) => p.data.group === group.key)
+        if (!list.length) return null
+        return (
+          <section class="flex flex-col gap-4" data-project-group>
+            <h2 class="font-medium">{group.title}</h2>
+            {/* Masonry: cards keep their natural image heights and pack into
+                columns, so no space is left under a short card. */}
+            <ul class="columns-1 gap-6 sm:columns-2" role="list">
+              {list.map(({ data }) => (
+                <li
+                  class="mb-8 flex break-inside-avoid flex-col gap-2"
+                  data-project
+                  data-type={data.type}
+                >
+                  <a
+                    href={data.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${data.name} (opens in a new tab)`}
+                    class="project-card block border border-border bg-card"
+                  >
+                    <Image
+                      src={data.image}
+                      alt=""
+                      widths={[360, 720]}
+                      sizes="(min-width: 640px) 336px, calc(100vw - 3rem)"
+                      class="block h-auto w-full"
+                    />
+                  </a>
+                  <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <a
+                      href={data.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class={cn(linkClass, "font-medium")}
+                    >
+                      {data.name}
+                    </a>
+                    <span
+                      class={cn(
+                        badgeVariants({ variant: "outline" }),
+                        "rounded-none font-mono"
+                      )}
+                    >
+                      {data.type}
+                    </span>
+                    <span class="font-mono text-xs text-muted-foreground">
+                      {data.date}
+                    </span>
+                  </div>
+                  <p class="text-muted-foreground">{data.description}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      })
+    }
+
+    <p class="text-muted-foreground" data-project-empty hidden>
+      Nothing here yet.
+    </p>
+  </section>
+</Layout>
+
+<script>
+  // Show only projects of the chosen type; hide groups that end up empty.
+  // Event delegation on the document, so it keeps working after client-side
+  // navigation without re-binding (bundled scripts run once).
+  function applyFilter(root: HTMLElement, type: string) {
+    root.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach((b) => {
+      b.setAttribute("aria-pressed", String(b.dataset.filter === type))
+    })
+    const page = root.closest("section")!
+    let shown = 0
+    page.querySelectorAll<HTMLElement>("[data-project-group]").forEach((g) => {
+      let count = 0
+      g.querySelectorAll<HTMLElement>("[data-project]").forEach((p) => {
+        const match = type === "all" || p.dataset.type === type
+        p.hidden = !match
+        if (match) count++
+      })
+      g.hidden = count === 0
+      shown += count
+    })
+    const empty = page.querySelector<HTMLElement>("[data-project-empty]")
+    if (empty) empty.hidden = shown > 0
+  }
+
+  document.addEventListener("click", (event) => {
+    const button = (event.target as Element | null)?.closest<HTMLButtonElement>(
+      "[data-project-filters] [data-filter]"
+    )
+    if (!button) return
+    const root = button.closest<HTMLElement>("[data-project-filters]")!
+    applyFilter(root, button.dataset.filter ?? "all")
+  })
+</script>

@@ -1,0 +1,44 @@
+---
+/**
+ * Sands of Time runner: a small rooftop runner under the hero title.
+ * Game logic lives in src/lib/runner.ts.
+ */
+---
+
+<figure class="flex flex-col gap-2 font-mono" data-sands-runner>
+  <canvas
+    class="block w-full touch-none border border-border bg-card/30 select-none"
+    width="400"
+    height="250"
+    tabindex="0"
+    role="img"
+    aria-label="Sands of Time runner mini-game. Press space to jump over rooftop gaps and spikes; hold R to rewind time after a fall."
+    data-runner-canvas></canvas>
+  <figcaption class="text-xs text-muted-foreground">
+    <span class="hidden sm:inline">
+      space to jump. hold r to rewind time. the dagger runs dry.
+    </span>
+    <span class="sm:hidden">
+      tap to jump. hold to rewind time. the dagger runs dry.
+    </span>
+  </figcaption>
+</figure>
+
+<script>
+  import { initSandsRunner } from "@/lib/runner"
+
+  // Boots on every page load under the ClientRouter and tears down before
+  // the page is swapped away (the canvas is not persisted).
+  let dispose: (() => void) | null = null
+  document.addEventListener("astro:page-load", () => {
+    const canvas = document.querySelector<HTMLCanvasElement>(
+      "[data-runner-canvas]"
+    )
+    if (!canvas) return
+    dispose = initSandsRunner(canvas)
+  })
+  document.addEventListener("astro:before-swap", () => {
+    dispose?.()
+    dispose = null
+  })
+</script>

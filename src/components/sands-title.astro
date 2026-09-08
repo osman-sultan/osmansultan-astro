@@ -1,0 +1,168 @@
+---
+/**
+ * Prince of Persia: The Sands of Time logo treatment — teal gradient
+ * letters over a fiery golden sand-glow.
+ *
+ * Layers (bottom to top):
+ * - wisps (outer): a wide, horizontally-stretched soft halo multiplied by
+ *   streaky noise, which carves it into thin tapering tendrils
+ * - wisps (inner): tight bright-gold displaced silhouette right behind the word
+ * - glow: warm text-shadow halo on the glyph edges
+ * - letters: teal gradient fill with dark navy stroke
+ * - field: Three.js port of the two wisp filters with the noise scrolled
+ *   over time so the sand moves (src/lib/sands.ts). Once running it hides
+ *   the static wisps, which remain as the no-WebGL fallback.
+ *
+ * The matching `.sands-*` classes live in global.css.
+ */
+import { cn } from "@/lib/utils"
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<!-- transition:persist="site-title" does two things: it names the view
+     transition, so the word (letters, glow and sand canvas together) glides
+     between the hero and the nav; and it keeps this exact DOM node across
+     navigations, so the canvas and its clock carry on rather than starting
+     over on every page. -->
+<span
+  class={cn("relative inline-block cursor-pointer", className)}
+  data-sands-title
+  transition:name="site-title"
+  transition:persist="site-title"
+  transition:animate="initial"
+>
+  <svg
+    class="pointer-events-none absolute size-0"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <defs>
+      <filter
+        id="sands-wisps-outer"
+        x="-110%"
+        y="-140%"
+        width="320%"
+        height="380%"
+      >
+        <feMorphology
+          in="SourceAlpha"
+          operator="dilate"
+          radius="3"
+          result="body"></feMorphology>
+        <!-- Anisotropic blur: spreads much farther sideways than up. -->
+        <feGaussianBlur in="body" stdDeviation="20 6" result="soft"
+        ></feGaussianBlur>
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.012 0.055"
+          numOctaves="3"
+          seed="11"
+          result="fine"></feTurbulence>
+        <!-- Very low-frequency patch mask: kills whole regions, boosts
+             others, so smears clump irregularly instead of ringing the
+             word evenly. -->
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.0045 0.016"
+          numOctaves="2"
+          seed="7"
+          result="macro"></feTurbulence>
+        <!-- halo × fine streaks × macro patches -->
+        <feComposite
+          in="soft"
+          in2="fine"
+          operator="arithmetic"
+          k1="2.2"
+          k2="0"
+          k3="0"
+          k4="0"
+          result="streaked"></feComposite>
+        <feComposite
+          in="streaked"
+          in2="macro"
+          operator="arithmetic"
+          k1="2.6"
+          k2="0"
+          k3="0"
+          k4="0"
+          result="clumped"></feComposite>
+        <feDisplacementMap
+          in="clumped"
+          in2="fine"
+          scale="30"
+          xChannelSelector="R"
+          yChannelSelector="G"
+          result="wisp"></feDisplacementMap>
+        <feComponentTransfer in="wisp" result="sharp">
+          <feFuncA type="linear" slope="3" intercept="-0.12"></feFuncA>
+        </feComponentTransfer>
+        <feFlood flood-color="#f0930f" result="paint"></feFlood>
+        <feComposite in="paint" in2="sharp" operator="in" result="colored"
+        ></feComposite>
+        <feGaussianBlur in="colored" stdDeviation="0.8"></feGaussianBlur>
+      </filter>
+      <filter
+        id="sands-wisps-inner"
+        x="-40%"
+        y="-60%"
+        width="180%"
+        height="220%"
+      >
+        <feMorphology
+          in="SourceAlpha"
+          operator="dilate"
+          radius="3"
+          result="body"></feMorphology>
+        <feGaussianBlur in="body" stdDeviation="5 2.5" result="soft"
+        ></feGaussianBlur>
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.022 0.055"
+          numOctaves="3"
+          seed="3"
+          result="noise"></feTurbulence>
+        <feDisplacementMap
+          in="soft"
+          in2="noise"
+          scale="20"
+          xChannelSelector="R"
+          yChannelSelector="G"
+          result="wisp"></feDisplacementMap>
+        <feFlood flood-color="#ffc23d" result="paint"></feFlood>
+        <feComposite in="paint" in2="wisp" operator="in" result="colored"
+        ></feComposite>
+        <feGaussianBlur in="colored" stdDeviation="1"></feGaussianBlur>
+      </filter>
+    </defs>
+  </svg>
+  <div class="sands-field" aria-hidden="true" data-sands-field></div>
+  <span aria-hidden="true" class="sands-layer sands-wisps sands-wisps--outer"
+    ><slot /></span
+  >
+  <span aria-hidden="true" class="sands-layer sands-wisps sands-wisps--inner"
+    ><slot /></span
+  >
+  <span aria-hidden="true" class="sands-layer sands-glow"><slot /></span>
+  <span class="sands-letters relative" data-sands-letters><slot /></span>
+</span>
+
+<script>
+  import { initSandsTitle } from "@/lib/sands"
+
+  // The title is on every page, so the shader is bundled and preloaded with
+  // the page script and started as early as possible; the canvas fades in
+  // on its first frame. Runs on astro:page-load (initial load and every
+  // client-side navigation) because bundled scripts only execute once
+  // under the ClientRouter; the init guard skips the persisted title.
+  function boot() {
+    document
+      .querySelectorAll<HTMLElement>("[data-sands-title]")
+      .forEach(initSandsTitle)
+  }
+  document.addEventListener("astro:page-load", boot)
+</script>

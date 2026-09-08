@@ -1,0 +1,135 @@
+---
+import Layout from "@/layouts/main.astro"
+import FlagPK from "flag-icons/flags/4x3/pk.svg"
+import FlagAE from "flag-icons/flags/4x3/ae.svg"
+import FlagCA from "flag-icons/flags/4x3/ca.svg"
+import { AtriosCard } from "@/components/atrios-card"
+
+const linkClass =
+  "text-link underline underline-offset-4 transition-opacity hover:opacity-70"
+---
+
+<Layout title="About">
+  <section class="flex flex-col gap-6 text-justify leading-relaxed">
+    <p aria-hidden="true">📍 Toronto, Canada</p>
+
+    <!-- 1. intro -->
+    <p>
+      <b>Hi, I'm Osman.</b> I'm an industrial engineer, a technologist, and a collector
+      of interests. I believe AI can be used for social good all the while preserving
+      our planet and upholding our humanity.
+    </p>
+
+    <!-- 2. current -->
+    <p>
+      Currently, I'm a founding engineer at{" "}
+      <AtriosCard client:load />, a startup backed by{" "}
+      <a
+        href="https://speedrun.a16z.com/companies/atrios"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>a16z speedrun</a
+      >. I'm also doing a master's in computer science at Georgia Tech, focusing
+      on computing systems and machine learning.
+    </p>
+
+    <!-- 3. past -->
+    <p>
+      Previously, I was a software engineer at{" "}
+      <a
+        href="https://www.healthtap.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>HealthTap</a
+      >, where I helped pioneer their use of AI in primary care by building a
+      voice assistant designed around patient safety, privacy, and access. I
+      earned my BASc in industrial engineering at UofT, where I built <a
+        href="https://www.utmist.ca/projects"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>conversational recommender systems</a
+      >, gave a <a
+        href="https://fsaeutoronto.ca/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>self-driving FSAE car</a
+      > its vision, organized <a
+        href="https://yourenext.ca"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>Canada's largest student-run career fair</a
+      >, ran a <a
+        href="https://www.projectx2020.com/projectx-2023"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>global undergraduate ML research competition</a
+      > with teams from CMU, Harvard, Cornell and ETH, and was a <a
+        href="https://orientation.skule.ca/about"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>F!rosh Leedur</a
+      > four years running. I also interned as an engineer at <a
+        href="https://ploopy.co"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>Ploopy</a
+      >, <a
+        href="https://doctalk.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>Doctalk</a
+      >, and <a
+        href="https://molex.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>Molex</a
+      >.
+    </p>
+
+    <!-- 4. personal -->
+    <p>
+      Before all that, I was born in Karachi <FlagPK
+        role="img"
+        aria-label="Pakistan"
+        class="inline-block h-[0.85em] w-auto rounded-[2px] align-[-0.08em]"
+      />, lived in Dubai <FlagAE
+        role="img"
+        aria-label="United Arab Emirates"
+        class="inline-block h-[0.85em] w-auto rounded-[2px] align-[-0.08em]"
+      />, and grew up in a city with the{" "}
+      <a
+        href="https://en.wikipedia.org/wiki/Ridgeway_Plaza"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}
+        >largest concentration of halal restaurants in North America</a
+      >{" "}
+      <FlagCA
+        role="img"
+        aria-label="Canada"
+        class="inline-block h-[0.85em] w-auto rounded-[2px] align-[-0.08em]"
+      />.
+    </p>
+
+    <p>
+      Want to chat? Reach out at <b>osmansultan2002 at gmail dot com</b>.
+    </p>
+
+    <p>
+      Else, find me on{" "}
+      <a
+        href="https://github.com/osman-sultan"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>GitHub</a
+      >{" "}
+      and{" "}
+      <a
+        href="https://www.linkedin.com/in/osmansultan-"
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkClass}>LinkedIn</a
+      >.
+    </p>
+  </section>
+</Layout>

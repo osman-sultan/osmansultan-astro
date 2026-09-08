@@ -1,17 +1,12 @@
 ---
 import Layout from "@/layouts/main.astro"
-import { Button } from "@/components/ui/button"
+import HomeHero from "@/components/home-hero.astro"
+import SandsRunner from "@/components/sands-runner.astro"
 ---
 
 <Layout>
-  <div class="flex min-h-svh p-6">
-    <div class="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-      <div>
-        <h1 class="font-medium">Project ready!</h1>
-        <p>You may now add components and start building.</p>
-        <p>We've already added the button component for you.</p>
-        <Button client:load className="mt-2">Button</Button>
-      </div>
-    </div>
+  <div class="flex flex-col gap-10 pt-6 sm:pt-10">
+    <HomeHero />
+    <SandsRunner />
   </div>
 </Layout>

@@ -1,0 +1,100 @@
+---
+import SandsTitle from "@/components/sands-title.astro"
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+
+const navItems = [
+  { title: "home", href: "/" },
+  { title: "about", href: "/about" },
+  { title: "logbook", href: "/logbook" },
+  { title: "projects", href: "/projects" },
+  { title: "resume", href: "/resume" },
+]
+
+const pathname = Astro.url.pathname
+const isHome = pathname === "/"
+
+function isActive(href: string) {
+  if (href === "/") return pathname === "/"
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+---
+
+<aside class="shrink-0 md:w-36">
+  <div
+    class="flex flex-col items-start gap-y-3 md:sticky md:top-24 md:items-end md:gap-y-10"
+  >
+    <!-- Site title. On the home page it lives in the hero; elsewhere it sits
+         here, sand and all, and the transition name on the SandsTitle root
+         lets the view transition carry it between the two spots. The empty
+         slot keeps the nav from jumping. -->
+    {
+      isHome ? (
+        <div class="h-7" aria-hidden="true" />
+      ) : (
+        <a href="/" class="sands-nav font-persia text-xl whitespace-nowrap">
+          <SandsTitle>Osman Sultan</SandsTitle>
+        </a>
+      )
+    }
+    <nav aria-label="Main">
+      <ul
+        class="flex flex-row gap-x-3 font-mono text-sm sm:gap-x-4 md:flex-col md:gap-y-2 md:text-end"
+      >
+        {
+          navItems.map((item) => {
+            const active = isActive(item.href)
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  class={cn(
+                    "transition-colors hover:text-foreground",
+                    active
+                      ? "font-semibold text-foreground"
+                      : "text-muted-foreground"
+                  )}
+                >
+                  {item.title}
+                </a>
+              </li>
+            )
+          })
+        }
+      </ul>
+    </nav>
+    <!-- MagicUI toggler: circular view-transition reveal from the button.
+         The "d" hotkey in theme-script.astro clicks it via data-theme-toggle. -->
+    <AnimatedThemeToggler
+      client:load
+      transition:persist="theme-toggler"
+      className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
+      title="Toggle theme (d)"
+      data-theme-toggle
+    />
+  </div>
+</aside>
+
+<script>
+  // Clicking the link for the page already showing (e.g. "home" on the home
+  // page) would otherwise re-run the swap and the title animation for no
+  // visible change. Swallow the click before the router sees it (capture
+  // phase; the router's own listener bails when defaultPrevented is set).
+  // Cancelling astro:before-preparation is not an option: the router
+  // answers that with a full page load.
+  const trim = (path: string) => path.replace(/\/+$/, "")
+  document.addEventListener(
+    "click",
+    (event) => {
+      const link = (event.target as Element | null)?.closest<HTMLAnchorElement>(
+        "aside a[href]"
+      )
+      if (!link || link.hash) return
+      if (trim(link.pathname) === trim(location.pathname))
+        event.preventDefault()
+    },
+    true
+  )
+</script>

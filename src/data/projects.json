@@ -1,0 +1,82 @@
+[
+  {
+    "id": "lion-optimizer",
+    "name": "lion optimizer paper recreation",
+    "type": "ml/ai",
+    "description": "A recreation of the Lion Optimizer paper, a novel optimization algorithm for machine learning for NLP and CV tasks, under constrained hardware.",
+    "date": "winter 2025",
+    "group": "recent",
+    "image": "../assets/projects/nlp-results.png",
+    "link": "https://github.com/osman-sultan/lion-optimizer"
+  },
+  {
+    "id": "toronto-pathfinder",
+    "name": "toronto pathfinder",
+    "type": "algorithms",
+    "description": "A route planning app using OpenStreetMap and A* to help cyclists find efficient routes while minimizing the chance of getting hit by a car.",
+    "date": "summer 2024",
+    "group": "recent",
+    "image": "../assets/projects/osm-pathfinder.png",
+    "link": "https://github.com/osman-sultan/osm-pathfinder"
+  },
+  {
+    "id": "terrasculpt",
+    "name": "terrasculpt",
+    "type": "ml/ai",
+    "description": "Explored generative and classification models in a unified vision pipeline to support environmental monitoring.",
+    "date": "winter 2023",
+    "group": "earlier",
+    "image": "../assets/projects/terrasculpt.jpg",
+    "link": "https://github.com/osman-sultan/TerraSculpt"
+  },
+  {
+    "id": "persona-ai",
+    "name": "persona.ai",
+    "type": "web",
+    "description": "A SaaS platform to create and chat with customized LLM-powered personas.",
+    "date": "fall 2023",
+    "group": "earlier",
+    "image": "../assets/projects/persona-ai.png",
+    "link": "https://github.com/osman-sultan/persona-ai"
+  },
+  {
+    "id": "carkart",
+    "name": "carkart marketplace",
+    "type": "web",
+    "description": "A fullstack e-commerce platform to compare, buy, sell, and trade cars.",
+    "date": "fall 2022",
+    "group": "earlier",
+    "image": "../assets/projects/carkart.png",
+    "link": "https://github.com/osman-sultan/CarKART-BackEnd"
+  },
+  {
+    "id": "soccer-injuries",
+    "name": "underlying factors in soccer injuries",
+    "type": "ml/ai",
+    "description": "Deep dive into soccer injury data and how it affects club success; Moneyball meets physiotherapy.",
+    "date": "fall 2022",
+    "group": "earlier",
+    "image": "../assets/projects/soccerinjuries.png",
+    "link": "https://github.com/osman-sultan/Underlying-Factors-in-Soccer-Injuries"
+  },
+  {
+    "id": "metro-redesign",
+    "name": "metro.ca ui/ux redesign",
+    "type": "ui/ux",
+    "description": "Revamped the Canadian grocery store's terrible online store so that it is actually usable.",
+    "date": "winter 2022",
+    "group": "earlier",
+    "image": "../assets/projects/metro.png",
+    "link": "https://www.figma.com/design/tdwsXc9MEZmhoZh29XSm42/Metro---Function-1?node-id=0-1"
+  },
+  {
+    "id": "stable-marriage",
+    "name": "stable marriage problem solver",
+    "type": "algorithms",
+    "description": "Gale-Shapley algorithm tries to lower divorce rates.",
+    "date": "fall 2021",
+    "group": "earlier",
+    "image": "../assets/projects/smp.png",
+    "link": "https://github.com/osman-sultan/Stable-Marriage-Problem-Solver"
+  }
+]

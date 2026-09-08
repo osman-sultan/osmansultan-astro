@@ -6,25 +6,32 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.141 0.005 285.823);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.141 0.005 285.823);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.141 0.005 285.823);
+    /* Manila-folder paper. */
+    --background: oklch(0.88 0.085 87);
+    --foreground: oklch(0.22 0.02 70);
+    --card: oklch(0.915 0.07 89);
+    --card-foreground: oklch(0.22 0.02 70);
+    --popover: oklch(0.915 0.07 89);
+    --popover-foreground: oklch(0.22 0.02 70);
     --primary: oklch(0.508 0.118 165.612);
     --primary-foreground: oklch(0.979 0.021 166.113);
-    --secondary: oklch(0.967 0.001 286.375);
-    --secondary-foreground: oklch(0.21 0.006 285.885);
-    --muted: oklch(0.967 0.001 286.375);
-    --muted-foreground: oklch(0.552 0.016 285.938);
-    --accent: oklch(0.967 0.001 286.375);
-    --accent-foreground: oklch(0.21 0.006 285.885);
+    --secondary: oklch(0.83 0.09 85);
+    --secondary-foreground: oklch(0.22 0.02 70);
+    --muted: oklch(0.83 0.09 85);
+    --muted-foreground: oklch(0.5 0.035 75);
+    --accent: oklch(0.83 0.09 85);
+    --accent-foreground: oklch(0.22 0.02 70);
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.92 0.004 286.32);
-    --input: oklch(0.92 0.004 286.32);
-    --ring: oklch(0.705 0.015 286.067);
+    --border: oklch(0.75 0.09 80);
+    --input: oklch(0.75 0.09 80);
+    --ring: oklch(0.7 0.04 80);
+    /* Whole-page surface. */
+    --surface-gradient:
+      radial-gradient(90% 70% at 12% -10%, oklch(0.965 0.05 94) 0%, oklch(0.965 0.05 94 / 0) 60%),
+      linear-gradient(160deg, oklch(0.905 0.08 89) 0%, oklch(0.825 0.1 83) 45%, oklch(0.71 0.11 73) 100%);
+    /* Whole-page surface: a faint top-to-bottom shift in the paper tone. */
     --chart-1: oklch(0.871 0.15 154.449);
     --chart-2: oklch(0.723 0.219 149.579);
     --chart-3: oklch(0.627 0.194 149.214);
@@ -39,27 +46,32 @@
     --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
     --sidebar-border: oklch(0.92 0.004 286.32);
     --sidebar-ring: oklch(0.705 0.015 286.067);
+    --link: oklch(0.35 0.075 205);
 }
 
 .dark {
-    --background: oklch(0.141 0.005 285.823);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.21 0.006 285.885);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.21 0.006 285.885);
-    --popover-foreground: oklch(0.985 0 0);
+    /* Deep navy fading to black, a quieter echo of the title's steel gradient. */
+    --background: oklch(0.16 0.022 245);
+    --foreground: oklch(0.96 0.008 240);
+    --card: oklch(0.2 0.024 240);
+    --card-foreground: oklch(0.96 0.008 240);
+    --popover: oklch(0.2 0.024 240);
+    --popover-foreground: oklch(0.96 0.008 240);
     --primary: oklch(0.432 0.095 166.913);
     --primary-foreground: oklch(0.979 0.021 166.113);
-    --secondary: oklch(0.274 0.006 286.033);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.274 0.006 286.033);
-    --muted-foreground: oklch(0.705 0.015 286.067);
-    --accent: oklch(0.274 0.006 286.033);
-    --accent-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.26 0.024 240);
+    --secondary-foreground: oklch(0.96 0.008 240);
+    --muted: oklch(0.26 0.024 240);
+    --muted-foreground: oklch(0.7 0.02 235);
+    --accent: oklch(0.26 0.024 240);
+    --accent-foreground: oklch(0.96 0.008 240);
     --destructive: oklch(0.704 0.191 22.216);
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.552 0.016 285.938);
+    --ring: oklch(0.55 0.02 240);
+    --surface-gradient:
+      radial-gradient(110% 70% at 18% -10%, oklch(0.55 0.15 220) 0%, oklch(0.55 0.15 220 / 0) 55%),
+      linear-gradient(160deg, oklch(0.44 0.14 224) 0%, oklch(0.22 0.08 234) 24%, oklch(0.06 0.016 250) 50%, oklch(0.02 0.004 260) 100%);
     --chart-1: oklch(0.871 0.15 154.449);
     --chart-2: oklch(0.723 0.219 149.579);
     --chart-3: oklch(0.627 0.194 149.214);
@@ -73,11 +85,14 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.552 0.016 285.938);
+    --link: oklch(0.86 0.1 205);
 }
 
 @theme inline {
     --font-serif: 'Merriweather Variable', serif;
     --font-heading: 'Outfit Variable', sans-serif;
+    /* Defined by <Font cssVariable="--font-prince-of-persia" /> on pages that load it. */
+    --font-persia: var(--font-prince-of-persia);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -103,6 +118,7 @@
     --color-secondary: var(--secondary);
     --color-primary-foreground: var(--primary-foreground);
     --color-primary: var(--primary);
+    --color-link: var(--link);
     --color-popover-foreground: var(--popover-foreground);
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
@@ -118,17 +134,245 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+@layer components {
+  .sands-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Sandy fire streaks radiating out horizontally behind the word. Hidden
+     unless the shader cannot run (data-sands-static): showing them first
+     and then swapping in the moving sand read as a jolt on every load. */
+  .sands-wisps {
+    display: none;
+    color: #f59714;
+    transform-origin: 50% 60%;
+  }
+
+  [data-sands-static] .sands-wisps {
+    display: block;
+  }
+
+  .sands-wisps--outer {
+    filter: url(#sands-wisps-outer);
+    transform: scale(1.06, 1.04);
+    opacity: 0.8;
+  }
+
+  .sands-wisps--inner {
+    filter: url(#sands-wisps-inner);
+    transform: scale(1.05, 1.03);
+    opacity: 0.85;
+  }
+
+  /* GPU version of the wisps, oversized so streaks can reach past the word.
+     It replaces the SVG wisps once the shader is running. */
+  .sands-field {
+    position: absolute;
+    top: -120%;
+    right: -45%;
+    bottom: -520%; /* room for the falling dust to fade before the edge */
+    left: -45%;
+    pointer-events: none;
+    user-select: none;
+    /* Fades in once the first frame is rendered (data-sands-gpu). */
+    opacity: 0;
+    transition: opacity 600ms ease-out;
+  }
+
+  [data-sands-gpu] .sands-field {
+    opacity: 1;
+  }
+
+  .sands-field > canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* The SVG wisps are painted with fixed golds for the dark theme. They
+     show until the shader takes over, so on the light theme they would
+     flash dark-mode colours on every load; give them the light palette
+     (the shader's PALETTE.light) instead. */
+  :root:not(.dark) #sands-wisps-outer feFlood {
+    flood-color: #b34d05;
+  }
+
+  :root:not(.dark) #sands-wisps-inner feFlood {
+    flood-color: #e08f14;
+  }
+
+  /* On paper the bright gold glow disappears; use a burnt orange one instead. */
+  :root:not(.dark) .sands-glow {
+    text-shadow:
+      0 0 0.125em #e29a2c,
+      0 0 0.29em #c96f0e,
+      0 0 0.54em #a8540a,
+      0 0 1em #8a4208;
+  }
+
+  /* Hot golden halo hugging the glyph edges. The fill is transparent —
+     text-shadow still renders from the glyph shape — so no gold shows
+     through the letter fill above it. */
+  /* Shadow radii in em so the glow scales with the title (48px hero, 20px nav). */
+  .sands-glow {
+    color: transparent;
+    text-shadow:
+      0 0 0.17em #ffe9a8,
+      0 0 0.375em #ffc84d,
+      0 0 0.75em #ff9d2e,
+      0 0 1.46em #f07817;
+    opacity: 0.9;
+  }
+
+  /* Teal steel gradient fill with a dark navy edge. The padding/negative
+     margin pair grows the background box to cover glyph swashes that
+     overflow the line box — background-clip: text paints nothing outside
+     the background box, which would leave those parts unfilled. */
+  .sands-letters {
+    display: inline-block;
+    padding: 0.35em 0.25em;
+    margin: -0.35em -0.25em;
+    /* Moving light sheen layered over the static steel gradient; only the
+       sheen layer's position animates. */
+    background:
+      linear-gradient(
+          115deg,
+          transparent 30%,
+          rgb(205 240 255 / 55%) 42%,
+          rgb(140 210 235 / 35%) 46%,
+          transparent 56%
+        )
+        200% 0 / 250% 100% no-repeat,
+      linear-gradient(180deg, #b7dbe6 0%, #5da5bd 30%, #1d6a86 60%, #0b3d54 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-stroke: 2px rgb(6 32 46);
+    animation: sands-sheen 5s linear infinite;
+  }
+
+  /* Project cards: on hover the card lifts and a teal-navy gradient slab
+     (the dark theme's own page gradient) slides out from under it. */
+  .project-card {
+    position: relative;
+    z-index: 0;
+    transition: transform 200ms ease;
+  }
+
+  .project-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    background: linear-gradient(
+      135deg,
+      oklch(0.55 0.15 220) 0%,
+      oklch(0.4 0.135 225) 50%,
+      oklch(0.22 0.08 234) 100%
+    );
+    transition:
+      translate 200ms ease,
+      opacity 200ms ease;
+  }
+
+  .project-card:hover {
+    transform: translate(-2px, -2px);
+  }
+
+  .project-card:hover::before {
+    translate: 6px 6px;
+    opacity: 1;
+  }
+
+  /* Nav-sized copy of the title: the 2px stroke would swallow 20px glyphs. */
+  .sands-nav .sands-letters {
+    -webkit-text-stroke: 0.6px rgb(6 32 46);
+  }
+}
+
+@keyframes sands-sheen {
+  0% {
+    background-position:
+      200% 0,
+      0 0;
+  }
+  100% {
+    background-position:
+      -100% 0,
+      0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sands-letters {
+    animation: none;
+  }
+
+}
+
+/* ---- MagicUI AnimatedThemeToggler ------------------------------------
+   The toggler sets the data attribute and duration variable on <html> only
+   while a toggle is in flight, so other view transitions are unaffected. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-magicui-theme-vt="active"]::view-transition-group(root) {
+  animation-duration: var(--magicui-theme-toggle-vt-duration);
+}
+
+/* ---- Page navigation (Astro ClientRouter) -----------------------------
+   Only the site title animates, flying between the hero and the nav. The
+   rest of the page swaps instantly: the root rule above already switches
+   the browser's default crossfade off, which would otherwise read as a
+   flash on every navigation. */
+html::view-transition-group(site-title) {
+  animation-duration: 650ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* The title is a persisted, live element, so the "new" side is the moving
+   sand itself: show it at once, and drop the frozen "old" snapshot quickly
+   rather than crossfading a still image over it for the whole move. */
+html::view-transition-old(site-title) {
+  animation-duration: 120ms;
+  animation-timing-function: ease-out;
+}
+html::view-transition-new(site-title) {
+  animation: none;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
     }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    /* The page surface lives on <html> below; keep the body clear so the
+       gradient and the NoiseTexture grain show through everywhere. */
+    background-color: transparent;
     }
   button:not(:disabled), [role="button"]:not(:disabled) {
     cursor: pointer;
     }
   html {
     @apply font-serif;
+    min-height: 100%;
+    /* Page gradient; the grain is the NoiseTexture layer in the layout. */
+    background-color: var(--background);
+    background-image: var(--surface-gradient);
+    background-repeat: no-repeat;
+    /* Decorative layers (the hero sand) may spill past the content column;
+       clip at the viewport rather than adding a horizontal scrollbar. */
+    overflow-x: clip;
     }
+}
+  ::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
 }

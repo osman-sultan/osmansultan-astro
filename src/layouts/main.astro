@@ -1,15 +1,57 @@
 ---
 import "@/styles/global.css"
+
+import { Font } from "astro:assets"
+import { ClientRouter } from "astro:transitions"
+
+import SiteNav from "@/components/site-nav.astro"
+import ThemeScript from "@/components/theme-script.astro"
+import { NoiseTexture } from "@/components/ui/noise-texture"
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const siteName = "Osman Sultan"
+const { title, description = "Personal portfolio of Osman Sultan." } =
+  Astro.props
+const pageTitle = title ? `${title} | ${siteName}` : siteName
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Astro App</title>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <ThemeScript />
+    <!-- Client-side routing so the hero title can morph into the nav logo
+         (transition:name="site-title") instead of the page reloading. -->
+    <ClientRouter />
+    <Font cssVariable="--font-prince-of-persia" preload />
+    <slot name="head" />
   </head>
-  <body>
-    <slot />
+  <body class="antialiased">
+    <!-- Page grain (MagicUI NoiseTexture), static SVG behind the content. -->
+    <div class="pointer-events-none fixed inset-0 -z-10" aria-hidden="true">
+      <NoiseTexture
+        frequency={0.75}
+        octaves={4}
+        slope={0.3}
+        noiseOpacity={0.6}
+        className="opacity-45 dark:opacity-65"
+      />
+    </div>
+    <div
+      class="mx-auto flex min-h-svh w-full max-w-3xl flex-col gap-y-8 px-6 py-12 md:flex-row md:gap-x-12 md:py-24"
+    >
+      <SiteNav />
+      <main class="min-w-0 flex-1 text-sm font-light">
+        <slot />
+      </main>
+    </div>
   </body>
 </html>
