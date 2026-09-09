@@ -269,11 +269,6 @@
     translate: 6px 6px;
     opacity: 1;
   }
-
-  /* Nav-sized copy of the title: the 2px stroke would swallow 20px glyphs. */
-  .sands-nav .sands-letters {
-    -webkit-text-stroke: 0.6px rgb(6 32 46);
-  }
 }
 
 @keyframes sands-sheen {

@@ -1,5 +1,6 @@
 ---
-import SandsTitle from "@/components/sands-title.astro"
+import LogoLight from "@/assets/logo-light.svg"
+import LogoDark from "@/assets/logo-dark.svg"
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -13,7 +14,6 @@ const navItems = [
 ]
 
 const pathname = Astro.url.pathname
-const isHome = pathname === "/"
 
 function isActive(href: string) {
   if (href === "/") return pathname === "/"
@@ -25,19 +25,16 @@ function isActive(href: string) {
   <div
     class="flex flex-col items-start gap-y-3 md:sticky md:top-24 md:items-end md:gap-y-10"
   >
-    <!-- Site title. On the home page it lives in the hero; elsewhere it sits
-         here, sand and all, and the transition name on the SandsTitle root
-         lets the view transition carry it between the two spots. The empty
-         slot keeps the nav from jumping. -->
-    {
-      isHome ? (
-        <div class="h-7" aria-hidden="true" />
-      ) : (
-        <a href="/" class="sands-nav font-persia text-xl whitespace-nowrap">
-          <SandsTitle>Osman Sultan</SandsTitle>
-        </a>
-      )
-    }
+    <!-- Logo: a mountain scene, sunlit by day and moonlit by night, drawn in
+         the text colour. The "Osman Sultan" title itself lives in the hero. -->
+    <a
+      href="/"
+      aria-label="Home"
+      class="text-foreground transition-opacity hover:opacity-70"
+    >
+      <LogoLight class="h-12 w-12 dark:hidden" aria-hidden="true" />
+      <LogoDark class="hidden h-12 w-12 dark:block" aria-hidden="true" />
+    </a>
     <nav aria-label="Main">
       <ul
         class="flex flex-row gap-x-3 font-mono text-sm sm:gap-x-4 md:flex-col md:gap-y-2 md:text-end"
