@@ -44,21 +44,16 @@ const DUST = {
   shakeOpacity: 0.7,
 }
 
-// Sand colours per theme. On black the SVG's bright golds work; on manila
-// paper they vanish, so light mode uses burnt, darker sand and dark dust.
+// Sand colours: the same golds in both themes (the light page is a pale
+// steel blue they read against); the dust just gets a push in daylight.
+const GOLD = {
+  outer: [0.941, 0.576, 0.059], // #f0930f
+  inner: [1.0, 0.761, 0.239], // #ffc23d
+  dust: [0.92, 0.76, 0.5],
+}
 const PALETTE = {
-  dark: {
-    outer: [0.941, 0.576, 0.059], // #f0930f
-    inner: [1.0, 0.761, 0.239], // #ffc23d
-    dust: [0.92, 0.76, 0.5],
-    dustBoost: 1,
-  },
-  light: {
-    outer: [0.7, 0.3, 0.02],
-    inner: [0.88, 0.56, 0.08],
-    dust: [0.4, 0.24, 0.08],
-    dustBoost: 1.8,
-  },
+  dark: { ...GOLD, dustBoost: 1 },
+  light: { ...GOLD, dustBoost: 1.4 },
 }
 
 // Hover "footprint": a pressure field the cursor stamps into, which relaxes

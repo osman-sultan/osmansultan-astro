@@ -8,30 +8,31 @@
 
 
 :root {
-    /* Manila-folder paper. */
-    --background: oklch(0.88 0.085 87);
-    --foreground: oklch(0.22 0.02 70);
-    --card: oklch(0.915 0.07 89);
-    --card-foreground: oklch(0.22 0.02 70);
-    --popover: oklch(0.915 0.07 89);
-    --popover-foreground: oklch(0.22 0.02 70);
+    /* Pale steel blue: a daylight echo of the dark theme's navy, cool enough
+       for the title's gold sand to read against it. */
+    --background: oklch(0.9 0.035 228);
+    --foreground: oklch(0.2 0.03 245);
+    --card: oklch(0.935 0.028 230);
+    --card-foreground: oklch(0.2 0.03 245);
+    --popover: oklch(0.935 0.028 230);
+    --popover-foreground: oklch(0.2 0.03 245);
     --primary: oklch(0.508 0.118 165.612);
     --primary-foreground: oklch(0.979 0.021 166.113);
-    --secondary: oklch(0.83 0.09 85);
-    --secondary-foreground: oklch(0.22 0.02 70);
-    --muted: oklch(0.83 0.09 85);
-    --muted-foreground: oklch(0.5 0.035 75);
-    --accent: oklch(0.83 0.09 85);
-    --accent-foreground: oklch(0.22 0.02 70);
+    --secondary: oklch(0.86 0.04 228);
+    --secondary-foreground: oklch(0.2 0.03 245);
+    --muted: oklch(0.86 0.04 228);
+    --muted-foreground: oklch(0.45 0.04 240);
+    --accent: oklch(0.86 0.04 228);
+    --accent-foreground: oklch(0.2 0.03 245);
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.75 0.09 80);
-    --input: oklch(0.75 0.09 80);
-    --ring: oklch(0.7 0.04 80);
-    /* Whole-page surface. */
+    --border: oklch(0.76 0.05 225);
+    --input: oklch(0.76 0.05 225);
+    --ring: oklch(0.65 0.06 225);
+    /* Whole-page surface: light catching the top-left corner, deepening to
+       steel blue at the bottom right. */
     --surface-gradient:
-      radial-gradient(90% 70% at 12% -10%, oklch(0.965 0.05 94) 0%, oklch(0.965 0.05 94 / 0) 60%),
-      linear-gradient(160deg, oklch(0.905 0.08 89) 0%, oklch(0.825 0.1 83) 45%, oklch(0.71 0.11 73) 100%);
-    /* Whole-page surface: a faint top-to-bottom shift in the paper tone. */
+      radial-gradient(90% 70% at 12% -10%, oklch(0.985 0.015 230) 0%, oklch(0.985 0.015 230 / 0) 60%),
+      linear-gradient(160deg, oklch(0.94 0.03 230) 0%, oklch(0.86 0.05 226) 45%, oklch(0.74 0.08 220) 100%);
     --chart-1: oklch(0.871 0.15 154.449);
     --chart-2: oklch(0.723 0.219 149.579);
     --chart-3: oklch(0.627 0.194 149.214);
@@ -46,7 +47,9 @@
     --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
     --sidebar-border: oklch(0.92 0.004 286.32);
     --sidebar-ring: oklch(0.705 0.015 286.067);
-    --link: oklch(0.35 0.075 205);
+    /* Burnt amber, the sand's colour family, which reads on the steel blue
+       where a teal would sink into it. */
+    --link: oklch(0.5 0.15 48);
 }
 
 .dark {
@@ -190,27 +193,6 @@
     display: block;
     width: 100%;
     height: 100%;
-  }
-
-  /* The SVG wisps are painted with fixed golds for the dark theme. They
-     show until the shader takes over, so on the light theme they would
-     flash dark-mode colours on every load; give them the light palette
-     (the shader's PALETTE.light) instead. */
-  :root:not(.dark) #sands-wisps-outer feFlood {
-    flood-color: #b34d05;
-  }
-
-  :root:not(.dark) #sands-wisps-inner feFlood {
-    flood-color: #e08f14;
-  }
-
-  /* On paper the bright gold glow disappears; use a burnt orange one instead. */
-  :root:not(.dark) .sands-glow {
-    text-shadow:
-      0 0 0.125em #e29a2c,
-      0 0 0.29em #c96f0e,
-      0 0 0.54em #a8540a,
-      0 0 1em #8a4208;
   }
 
   /* Hot golden halo hugging the glyph edges. The fill is transparent —
