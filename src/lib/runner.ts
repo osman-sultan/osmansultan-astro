@@ -82,6 +82,9 @@ const TARGET_FPS = 60
 // Redraw period while nothing moves (idle, dead, out of sand): enough for
 // the dagger's sheen and the blinking prompt.
 const IDLE_MS = 50
+// How far the window frame's top bar reaches into the canvas (see
+// sands-runner.astro): the HUD starts below it.
+const HUD_TOP = 36
 
 type Part = { idx: number; x: number; w: number } // one building in a platform
 type Clutter = { idx: number; x: number } // a prop on a roof, x from its start
@@ -974,14 +977,23 @@ export function initSandsRunner(canvas: HTMLCanvasElement) {
     }
 
     // HUD.
-    text(`${Math.floor(dist)} m`, 12, 10, "left", FONT_HUD, pal.text)
-    text(`best ${Math.floor(best)} m`, W - 12, 10, "right", FONT_HUD, pal.muted)
+    // The HUD sits below the window frame's top bar, which covers the top
+    // HUD_TOP px of the canvas at the corners (the arch in the middle is open).
+    text(`${Math.floor(dist)} m`, 12, HUD_TOP, "left", FONT_HUD, pal.text)
+    text(
+      `best ${Math.floor(best)} m`,
+      W - 12,
+      HUD_TOP,
+      "right",
+      FONT_HUD,
+      pal.muted
+    )
 
     // Dagger of Time: its glass blade holds the banked rewind time. The
     // empty dagger is drawn whole and the sand-filled one clipped to the
     // current level, so the sand recedes toward the hilt as it is spent.
     const dx = 8
-    const dy = 24
+    const dy = HUD_TOP + 14
     const dh = Math.round((DAGGER.h / DAGGER.w) * DAGGER_W)
     const k = DAGGER_W / DAGGER.w
     const fx0 = dx + DAGGER.fill[0]! * k

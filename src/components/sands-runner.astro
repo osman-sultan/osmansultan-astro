@@ -1,19 +1,51 @@
 ---
 /**
- * Sands of Time runner: a small rooftop runner under the hero title.
- * Game logic lives in src/lib/runner.ts.
+ * Sands of Time runner: a small rooftop runner under the hero title, seen
+ * through an ornate window frame. Game logic lives in src/lib/runner.ts.
+ *
+ * Frame geometry (scripts/slice-game-art.mjs prints it): the frame image is
+ * 991 x 647 with its opening at x 106-882 and y 98-559, and an arch rising
+ * to y 45 in the middle of the top bar. The canvas fills the opening's width
+ * and runs from the arch's apex down to the bottom bar, so the top bar
+ * covers its top corners (the HUD starts below that: HUD_TOP in runner.ts)
+ * and the sky shows through the arch. The frame is squashed 6% to make the
+ * opening's height match the canvas's 8:5 shape. The percentages below are
+ * all of the figure's width.
  */
+import frameLight from "@/assets/game/frame-light.webp"
+import frameDark from "@/assets/game/frame-dark.webp"
+
+const frameClass =
+  "pointer-events-none absolute inset-x-0 top-0 aspect-[991/610] w-full select-none"
 ---
 
 <figure class="flex flex-col gap-2 font-mono" data-sands-runner>
-  <canvas
-    class="block w-full touch-none border border-border bg-card/30 select-none"
-    width="400"
-    height="250"
-    tabindex="0"
-    role="img"
-    aria-label="Sands of Time runner mini-game. Press space to jump over rooftop gaps and spikes; hold R to rewind time, even mid-run."
-    data-runner-canvas></canvas>
+  <div class="relative pt-[4.28%] pb-[8.38%]">
+    <canvas
+      class="ml-[10.7%] block w-[78.3%] touch-none bg-card/30 select-none"
+      width="400"
+      height="250"
+      tabindex="0"
+      role="img"
+      aria-label="Sands of Time runner mini-game. Press space to jump over rooftop gaps and clutter; hold R to rewind time, even mid-run."
+      data-runner-canvas></canvas>
+    <img
+      src={frameLight.src}
+      width={frameLight.width}
+      height={frameLight.height}
+      alt=""
+      aria-hidden="true"
+      class:list={[frameClass, "dark:hidden"]}
+    />
+    <img
+      src={frameDark.src}
+      width={frameDark.width}
+      height={frameDark.height}
+      alt=""
+      aria-hidden="true"
+      class:list={[frameClass, "hidden dark:block"]}
+    />
+  </div>
   <figcaption class="text-xs text-muted-foreground">
     <span class="hidden sm:inline">
       space to jump. hold r to rewind time. the dagger runs dry.

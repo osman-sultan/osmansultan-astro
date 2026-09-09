@@ -13,7 +13,8 @@
 //   prince-run.png (optional: a single-row run cycle that replaces the run
 //   row of prince.png), sky-day.png / sky-night.png (optional opaque sky
 //   backdrops, cropped to the canvas shape) and dagger.png (optional HUD
-//   dagger sheet: the empty copy above the sand-filled copy)
+//   dagger sheet: the empty copy above the sand-filled copy) and frames.png
+//   (optional: the light and dark window frames side by side)
 // Layers are trimmed of their transparent top and saved as WebP. Sheets are
 // cut on their transparent gaps into rooftop pieces; each piece's walkable
 // roofline is the first row that spans the piece (merlons and domes above it
@@ -47,6 +48,7 @@ const ROLES = [
   "sky-day",
   "sky-night",
   "dagger",
+  "frames",
 ]
 const OPTIONAL = new Set([
   "night-3-rooftops",
@@ -57,6 +59,7 @@ const OPTIONAL = new Set([
   "sky-day",
   "sky-night",
   "dagger",
+  "frames",
 ])
 const FILES = Object.fromEntries(
   ROLES.map((r) => [r, existsSync(join(SRC, `${r}.png`)) ? `${r}.png` : null])
@@ -545,3 +548,45 @@ async function dagger(file) {
   console.log(`dagger ${empty.w}x${empty.h}, sand spans x ${x0}-${x1}`)
 }
 if (FILES["dagger"]) await dagger(f("dagger"))
+
+// --- frames ---------------------------------------------------------------------
+// The ornate window frame around the canvas, light and dark side by side in
+// one image. Each is trimmed to its paint; the component that overlays it
+// on the canvas is laid out from the opening measured here.
+async function frames(file) {
+  const r = await raw(file)
+  const [band] = bands(r)
+  const found = bandFrames(r, file, band, "run")
+  if (found.length !== 2)
+    throw new Error(`frames sheet: expected 2 frames, found ${found.length}`)
+  for (const [k, name] of [["frame-light"], ["frame-dark"]].map((n, i) => [
+    i,
+    n[0],
+  ])) {
+    const f = found[k]
+    await sharp(file)
+      .extract({ left: f.x0, top: f.top, width: f.w, height: f.h })
+      .webp({ quality: 80, alphaQuality: 90, effort: 6 })
+      .toFile(join(OUT, `${name}.webp`))
+    // Opening: the transparent run across the middle row, and down a column
+    // a third of the way in (clear of the arch and the corner capitals).
+    const solid = (x, y) => alphaAt(r, x, y) > 40
+    const my = f.top + Math.round(f.h / 2)
+    const mx = f.x0 + Math.round(f.w / 2)
+    let l = mx
+    let rr = mx
+    while (l > f.x0 && !solid(l - 1, my)) l--
+    while (rr < f.x0 + f.w - 1 && !solid(rr + 1, my)) rr++
+    const cx = f.x0 + Math.round(f.w * 0.15)
+    let t = my
+    let b = my
+    while (t > f.top && !solid(cx, t - 1)) t--
+    while (b < f.top + f.h - 1 && !solid(cx, b + 1)) b++
+    let apex = my
+    while (apex > f.top && !solid(mx, apex - 1)) apex--
+    console.log(
+      `${name}: ${f.w}x${f.h}, opening x ${l - f.x0}-${rr - f.x0}, y ${t - f.top}-${b - f.top}, arch apex y ${apex - f.top}`
+    )
+  }
+}
+if (FILES["frames"]) await frames(f("frames"))
