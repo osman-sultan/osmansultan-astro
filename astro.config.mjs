@@ -3,9 +3,14 @@
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig, fontProviders } from "astro/config"
 import react from "@astrojs/react"
+import aws from "astro-sst"
 
 // https://astro.build/config
 export default defineConfig({
+  // Static output (the default); astro-sst only writes the build metadata SST
+  // needs to deploy dist/ to S3 + CloudFront. No Lambda is created.
+  output: "static",
+  adapter: aws(),
   vite: {
     plugins: [tailwindcss()],
   },
