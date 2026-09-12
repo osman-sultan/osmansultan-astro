@@ -1,0 +1,15 @@
+---
+import Layout from "@/layouts/main.astro"
+
+const linkClass =
+  "text-link underline underline-offset-4 transition-opacity hover:opacity-70"
+---
+
+<Layout title="Not found">
+  <section class="flex flex-col gap-4">
+    <h1 class="font-heading text-3xl font-semibold tracking-tight">404</h1>
+    <p>
+      That page doesn't exist. Head back <a href="/" class={linkClass}>home</a>.
+    </p>
+  </section>
+</Layout>
