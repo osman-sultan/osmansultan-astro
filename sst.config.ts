@@ -59,8 +59,13 @@ export default $config({
       // The site is static (see astro.config.mjs), so this is S3 + CloudFront
       // with no Lambda. `warm` and other server options do not apply.
       buildCommand: "bun run build",
-      // Custom domain is attached only to production once DNS is confirmed:
-      // domain: { name: "osmansultan.me", redirects: ["www.osmansultan.me"] },
+      // osmansultan.xyz is registered in Route 53 on the personal account, so
+      // SST creates the certificate and DNS records itself. Preview stages stay
+      // on their CloudFront URLs.
+      domain:
+        $app.stage === "production"
+          ? { name: "osmansultan.xyz", redirects: ["www.osmansultan.xyz"] }
+          : undefined,
     })
 
     return { url: site.url }
