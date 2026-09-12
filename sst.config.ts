@@ -3,9 +3,9 @@
 // Personal AWS account only. The profile below must never point at a work
 // account; `sst deploy --stage production` uses it directly. AWS_PROFILE in the
 // environment overrides this value, so keep that variable unset.
-// On SST Console Autodeploy (AWS CodeBuild) there is no local profile; the
-// build role supplies credentials, so the profile is left undefined there.
-const AWS_PROFILE = process.env.CODEBUILD_BUILD_ID ? undefined : "osman-personal"
+// SST Console Autodeploy sets SST_AWS_NO_PROFILE, which makes SST ignore this
+// value and use the build role instead, so it is safe to set unconditionally.
+const AWS_PROFILE = "osman-personal"
 
 export default $config({
   app(input) {
@@ -41,14 +41,15 @@ export default $config({
         }
       },
       // The default runner installs with npm, but this repo only has bun.lock.
+      // Same shape as the docs' pnpm example: install the package manager
+      // globally, then use it. SST_STAGE is already set in the build.
       async workflow({ $, event }) {
-        await $`curl -fsSL https://bun.sh/install | bash`
-        process.env.PATH = `${process.env.HOME}/.bun/bin:${process.env.PATH}`
+        await $`npm i -g bun`
         await $`bun install --frozen-lockfile`
         if (event.action === "removed") {
-          await $`bunx sst remove`
+          await $`bun sst remove`
         } else {
-          await $`bunx sst deploy`
+          await $`bun sst deploy`
         }
       },
     },
