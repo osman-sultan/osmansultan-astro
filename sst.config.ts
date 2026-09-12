@@ -3,7 +3,9 @@
 // Personal AWS account only. The profile below must never point at a work
 // account; `sst deploy --stage production` uses it directly. AWS_PROFILE in the
 // environment overrides this value, so keep that variable unset.
-const AWS_PROFILE = "osman-personal"
+// On SST Console Autodeploy (AWS CodeBuild) there is no local profile; the
+// build role supplies credentials, so the profile is left undefined there.
+const AWS_PROFILE = process.env.CODEBUILD_BUILD_ID ? undefined : "osman-personal"
 
 export default $config({
   app(input) {
@@ -20,6 +22,36 @@ export default $config({
         },
       },
     }
+  },
+  console: {
+    autodeploy: {
+      // SST Console runs these on AWS CodeBuild in the personal account.
+      // Pushes to main deploy production; pull requests get a pr-<n> preview
+      // stage that is removed when the PR closes.
+      target(event) {
+        if (
+          event.type === "branch" &&
+          event.branch === "main" &&
+          event.action === "pushed"
+        ) {
+          return { stage: "production" }
+        }
+        if (event.type === "pull_request") {
+          return { stage: `pr-${event.number}` }
+        }
+      },
+      // The default runner installs with npm, but this repo only has bun.lock.
+      async workflow({ $, event }) {
+        await $`curl -fsSL https://bun.sh/install | bash`
+        process.env.PATH = `${process.env.HOME}/.bun/bin:${process.env.PATH}`
+        await $`bun install --frozen-lockfile`
+        if (event.action === "removed") {
+          await $`bunx sst remove`
+        } else {
+          await $`bunx sst deploy`
+        }
+      },
+    },
   },
   async run() {
     const site = new sst.aws.Astro("Site", {
