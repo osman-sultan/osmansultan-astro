@@ -177,9 +177,16 @@ const { class: className } = Astro.props
     } catch (e) {
       soft = true
     }
+    // On the home page the title is the full-size hero, and rasterising its
+    // filtered wisps costs a CPU-only device over a second of main-thread
+    // time right when the page is trying to become interactive. There the
+    // decision is recorded (data-sands-soft) and initSandsTitle turns the
+    // wisps on after the page is idle; the nav-sized title elsewhere is
+    // cheap and gets them for the first frame.
+    var hero = location.pathname === "/"
     roots.forEach(function (r) {
       r.setAttribute("data-sands-probed", "")
-      if (soft) r.setAttribute("data-sands-static", "")
+      if (soft) r.setAttribute(hero ? "data-sands-soft" : "data-sands-static", "")
     })
   })()
 </script>

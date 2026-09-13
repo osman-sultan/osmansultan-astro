@@ -560,6 +560,15 @@ export function initSandsTitle(root: HTMLElement) {
   // for software-rendered WebGL; don't spin up a renderer just to find out
   // again. The checks below stay as the backstop for anything it missed.
   if (root.hasAttribute("data-sands-static")) return
+  if (root.hasAttribute("data-sands-soft")) {
+    // Probe found software GL on the hero: show the static wisps once the
+    // page is idle (global.css fades them in) instead of at first paint.
+    const show = () => root.setAttribute("data-sands-static", "")
+    if ("requestIdleCallback" in window)
+      window.requestIdleCallback(show, { timeout: 2500 })
+    else setTimeout(show, 500)
+    return
+  }
 
   const letters = root.querySelector<HTMLElement>("[data-sands-letters]")
   const host = root.querySelector<HTMLElement>("[data-sands-field]")

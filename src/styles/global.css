@@ -156,6 +156,13 @@
 
   [data-sands-static] .sands-wisps {
     display: block;
+    /* When the wisps are switched on after first paint (see the probe in
+       sands-title.astro) they fade in rather than pop. Browsers without
+       @starting-style simply show them at once. */
+    transition: opacity 0.5s ease-out;
+    @starting-style {
+      opacity: 0;
+    }
   }
 
   .sands-wisps--outer {
