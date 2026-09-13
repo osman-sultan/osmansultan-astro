@@ -151,6 +151,39 @@ const { class: className } = Astro.props
   <span class="sands-letters relative" data-sands-letters><slot /></span>
 </span>
 
+<script is:inline>
+  // Decide the no-GPU fallback before first paint. The bundled script below
+  // runs after load, and letting it flip the static wisps on that late made
+  // them the page's largest contentful paint. A throwaway context with
+  // failIfMajorPerformanceCaveat (plus the renderer name) is a few ms; on a
+  // real GPU nothing changes and initSandsTitle takes over as before.
+  ;(function () {
+    var roots = document.querySelectorAll("[data-sands-title]:not([data-sands-probed])")
+    var soft = false
+    try {
+      var c = document.createElement("canvas")
+      var o = { failIfMajorPerformanceCaveat: true }
+      var gl = c.getContext("webgl2", o) || c.getContext("webgl", o)
+      if (!gl) soft = true
+      else {
+        var dbg = gl.getExtension("WEBGL_debug_renderer_info")
+        var name = String(
+          dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)
+        )
+        soft = /swiftshader|llvmpipe|softpipe|software|mesa offscreen/i.test(name)
+        var lose = gl.getExtension("WEBGL_lose_context")
+        if (lose) lose.loseContext()
+      }
+    } catch (e) {
+      soft = true
+    }
+    roots.forEach(function (r) {
+      r.setAttribute("data-sands-probed", "")
+      if (soft) r.setAttribute("data-sands-static", "")
+    })
+  })()
+</script>
+
 <script>
   import { initSandsTitle } from "@/lib/sands"
 

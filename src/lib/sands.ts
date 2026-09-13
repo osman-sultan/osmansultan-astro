@@ -556,6 +556,10 @@ export function initSandsTitle(root: HTMLElement) {
   // component script), which would stack a second renderer on the title.
   if (root.dataset.sandsInit) return
   root.dataset.sandsInit = "1"
+  // The inline probe in sands-title.astro already chose the static wisps
+  // for software-rendered WebGL; don't spin up a renderer just to find out
+  // again. The checks below stay as the backstop for anything it missed.
+  if (root.hasAttribute("data-sands-static")) return
 
   const letters = root.querySelector<HTMLElement>("[data-sands-letters]")
   const host = root.querySelector<HTMLElement>("[data-sands-field]")

@@ -87,17 +87,35 @@ const frameSizes = "(min-width: 768px) 34rem, calc(100vw - 3rem)"
     "cancelIdleCallback" in window
       ? (id: number) => window.cancelIdleCallback(id)
       : (id: number) => window.clearTimeout(id)
+  // ...and only once the canvas is within a screen of the viewport, so a
+  // phone that never scrolls down to the game never pays for it at all.
+  let watcher: IntersectionObserver | null = null
   document.addEventListener("astro:page-load", () => {
     const canvas = document.querySelector<HTMLCanvasElement>(
       "[data-runner-canvas]"
     )
     if (!canvas) return
-    pending = idle(() => {
-      pending = null
-      dispose = initSandsRunner(canvas)
-    })
+    const boot = () => {
+      pending = idle(() => {
+        pending = null
+        dispose = initSandsRunner(canvas)
+      })
+    }
+    if (!("IntersectionObserver" in window)) return boot()
+    watcher = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return
+        watcher?.disconnect()
+        watcher = null
+        boot()
+      },
+      { rootMargin: "100% 0px" }
+    )
+    watcher.observe(canvas)
   })
   document.addEventListener("astro:before-swap", () => {
+    watcher?.disconnect()
+    watcher = null
     if (pending !== null) cancelIdle(pending)
     pending = null
     dispose?.()
