@@ -537,6 +537,20 @@ function blur(src: Float32Array, w: number, h: number, sx: number, sy: number) {
   return out
 }
 
+/**
+ * Belt and braces for browsers that hand out a software GL context without
+ * flagging the performance caveat: read the unmasked renderer string and
+ * bail on the known CPU rasterisers.
+ */
+function isSoftwareRenderer(renderer: THREE.WebGLRenderer) {
+  const gl = renderer.getContext()
+  const info = gl.getExtension("WEBGL_debug_renderer_info")
+  const name = info
+    ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL))
+    : String(gl.getParameter(gl.RENDERER))
+  return /swiftshader|llvmpipe|softpipe|software|mesa offscreen/i.test(name)
+}
+
 export function initSandsTitle(root: HTMLElement) {
   // Guard against double init (e.g. dev-server hot reloads re-running the
   // component script), which would stack a second renderer on the title.
@@ -558,9 +572,19 @@ export function initSandsTitle(root: HTMLElement) {
       antialias: false,
       premultipliedAlpha: true,
       powerPreference: "high-performance",
+      // Refuse a context the browser would have to software-render (no GPU,
+      // hardware acceleration off, remote desktops, headless audits). The
+      // shader ports an SVG filter chain and is far too heavy for a CPU
+      // rasteriser; the static SVG wisps are the right answer there.
+      failIfMajorPerformanceCaveat: true,
     })
   } catch {
     root.setAttribute("data-sands-static", "") // no WebGL: show the SVG wisps
+    return
+  }
+  if (isSoftwareRenderer(renderer)) {
+    renderer.dispose()
+    root.setAttribute("data-sands-static", "")
     return
   }
   renderer.setClearColor(0x000000, 0)
