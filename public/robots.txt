@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://osmansultan.xyz/sitemap-index.xml

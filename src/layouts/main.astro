@@ -12,12 +12,20 @@ import { NoiseTexture } from "@/components/ui/noise-texture"
 interface Props {
   title?: string
   description?: string
+  /** Keep search engines from indexing the page (used by 404). */
+  noindex?: boolean
 }
 
 const siteName = "Osman Sultan"
-const { title, description = "Personal portfolio of Osman Sultan." } =
-  Astro.props
+const {
+  title,
+  description = "Osman Sultan is an industrial engineer and software engineer in Toronto, building AI products. Founding engineer at Atrios.",
+  noindex = false,
+} = Astro.props
 const pageTitle = title ? `${title} | ${siteName}` : siteName
+// Absolute URLs for canonical/Open Graph; `site` is set in astro.config.mjs.
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
+const ogImageUrl = new URL("/og.png", Astro.site)
 ---
 
 <html lang="en">
@@ -26,8 +34,27 @@ const pageTitle = title ? `${title} | ${siteName}` : siteName
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="canonical" href={canonicalUrl} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="author" content={siteName} />
+    <!-- Open Graph / Twitter cards for link previews. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <ThemeScript />
     <!-- Client-side routing so the hero title can morph into the nav logo
          (transition:name="site-title") instead of the page reloading. -->
