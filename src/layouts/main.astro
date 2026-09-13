@@ -6,6 +6,7 @@ import { ClientRouter } from "astro:transitions"
 
 import SiteNav from "@/components/site-nav.astro"
 import ThemeScript from "@/components/theme-script.astro"
+import PostHog from "@/components/posthog.astro"
 import { NoiseTexture } from "@/components/ui/noise-texture"
 
 interface Props {
@@ -31,6 +32,7 @@ const pageTitle = title ? `${title} | ${siteName}` : siteName
     <!-- Client-side routing so the hero title can morph into the nav logo
          (transition:name="site-title") instead of the page reloading. -->
     <ClientRouter />
+    <PostHog />
     <Font cssVariable="--font-prince-of-persia" preload />
     <slot name="head" />
   </head>
