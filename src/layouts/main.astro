@@ -5,6 +5,11 @@ import { Font } from "astro:assets"
 import { ClientRouter } from "astro:transitions"
 
 import SiteNav from "@/components/site-nav.astro"
+// Body and heading fonts are imported by global.css with font-display: swap.
+// Preloading the latin variable files gets them in before first paint so
+// text does not reflow when they arrive (the main layout-shift source).
+import merriweatherUrl from "@fontsource-variable/merriweather/files/merriweather-latin-wght-normal.woff2?url"
+import outfitUrl from "@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2?url"
 import ThemeScript from "@/components/theme-script.astro"
 import PostHog from "@/components/posthog.astro"
 import { NoiseTexture } from "@/components/ui/noise-texture"
@@ -33,6 +38,11 @@ const ogImageUrl = new URL("/og.png", Astro.site)
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="preload" href={merriweatherUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={outfitUrl} as="font" type="font/woff2" crossorigin />
+    <!-- PostHog SDK origins (see posthog.astro). -->
+    <link rel="preconnect" href="https://us.i.posthog.com" />
+    <link rel="preconnect" href="https://us-assets.i.posthog.com" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

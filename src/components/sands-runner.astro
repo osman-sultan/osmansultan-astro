@@ -12,11 +12,17 @@
  * opening's height match the canvas's 8:5 shape. The percentages below are
  * all of the figure's width.
  */
+import { Image } from "astro:assets"
 import frameLight from "@/assets/game/frame-light.webp"
 import frameDark from "@/assets/game/frame-dark.webp"
 
 const frameClass =
   "pointer-events-none absolute inset-x-0 top-0 aspect-[991/610] w-full select-none"
+// The figure spans the main column: full width on phones, at most the
+// column's ~34rem beside the nav rail. Astro generates these widths so
+// phones are not sent the 991 px original.
+const frameWidths = [420, 640, 991]
+const frameSizes = "(min-width: 768px) 34rem, calc(100vw - 3rem)"
 ---
 
 <figure class="flex flex-col gap-2 font-mono" data-sands-runner>
@@ -29,21 +35,28 @@ const frameClass =
       role="img"
       aria-label="Sands of Time runner mini-game. Press space to jump over rooftop gaps and clutter; hold R to rewind time, even mid-run."
       data-runner-canvas></canvas>
-    <img
-      src={frameLight.src}
-      width={frameLight.width}
-      height={frameLight.height}
+    <!-- The light frame is the home page's largest paint, so it loads eagerly
+         at high priority. The dark one is display:none under the light
+         theme; lazy loading keeps the browser from fetching it there, while
+         in dark mode it sits in the viewport and loads right after layout. -->
+    <Image
+      src={frameLight}
+      widths={frameWidths}
+      sizes={frameSizes}
       alt=""
       aria-hidden="true"
-      class:list={[frameClass, "dark:hidden"]}
+      loading="eager"
+      fetchpriority="high"
+      class={`${frameClass} dark:hidden`}
     />
-    <img
-      src={frameDark.src}
-      width={frameDark.width}
-      height={frameDark.height}
+    <Image
+      src={frameDark}
+      widths={frameWidths}
+      sizes={frameSizes}
       alt=""
       aria-hidden="true"
-      class:list={[frameClass, "hidden dark:block"]}
+      loading="lazy"
+      class={`${frameClass} hidden dark:block`}
     />
   </div>
   <figcaption class="text-xs text-muted-foreground">
@@ -61,15 +74,32 @@ const frameClass =
 
   // Boots on every page load under the ClientRouter and tears down before
   // the page is swapped away (the canvas is not persisted).
+  // Booting loads the sprite atlas and builds the level, which is a chunk
+  // of main-thread work; it waits for an idle moment so the hero above it
+  // paints first. The canvas keeps its tinted placeholder until then.
   let dispose: (() => void) | null = null
+  let pending: number | null = null
+  const idle =
+    "requestIdleCallback" in window
+      ? (cb: () => void) => window.requestIdleCallback(cb, { timeout: 1500 })
+      : (cb: () => void) => window.setTimeout(cb, 200)
+  const cancelIdle =
+    "cancelIdleCallback" in window
+      ? (id: number) => window.cancelIdleCallback(id)
+      : (id: number) => window.clearTimeout(id)
   document.addEventListener("astro:page-load", () => {
     const canvas = document.querySelector<HTMLCanvasElement>(
       "[data-runner-canvas]"
     )
     if (!canvas) return
-    dispose = initSandsRunner(canvas)
+    pending = idle(() => {
+      pending = null
+      dispose = initSandsRunner(canvas)
+    })
   })
   document.addEventListener("astro:before-swap", () => {
+    if (pending !== null) cancelIdle(pending)
+    pending = null
     dispose?.()
     dispose = null
   })
