@@ -27,6 +27,9 @@ import { join } from "node:path"
 
 const SRC = process.argv[2]
 const OUT = join(import.meta.dirname, "..", "src", "assets", "game")
+// Vertical squash applied to the window frame (see sands-runner.astro).
+const FRAME_SQUASH = 610 / 647
+
 if (!SRC) throw new Error("usage: node scripts/slice-game-art.mjs <dir>")
 mkdirSync(OUT, { recursive: true })
 
@@ -564,8 +567,13 @@ async function frames(file) {
     n[0],
   ])) {
     const f = found[k]
+    // The frame is squashed 6% so its opening matches the canvas's 8:5
+    // shape. Baking that into the asset (rather than stretching it in CSS)
+    // keeps the displayed and natural aspect ratios equal, which Lighthouse
+    // checks under best practices. sands-runner.astro sizes it as 991/610.
     await sharp(file)
       .extract({ left: f.x0, top: f.top, width: f.w, height: f.h })
+      .resize({ width: f.w, height: Math.round(f.h * FRAME_SQUASH), fit: "fill" })
       .webp({ quality: 80, alphaQuality: 90, effort: 6 })
       .toFile(join(OUT, `${name}.webp`))
     // Opening: the transparent run across the middle row, and down a column
